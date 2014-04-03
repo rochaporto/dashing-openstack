@@ -1,0 +1,6 @@
+icinga:
+  prod:
+    host: '192.168.5.160'
+    port: '80'
+    proto: 'http'
+    auth_key: 'Z0ZcM7B4UOYfALLmLNhEdXkW5Ro'
