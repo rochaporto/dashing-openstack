@@ -1,0 +1,11 @@
+production:
+  provider: openstack
+  auth_service:
+    name: identity
+    host_uri: 'https://api1.example.com:5000/v2.0'
+    request: create_token
+    validator: list_tenants
+  auth_credentials:
+    username: admin
+    password: 123456
+    tenant_name: services
