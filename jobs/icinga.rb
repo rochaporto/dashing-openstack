@@ -20,16 +20,19 @@ SCHEDULER.every '10s' do
 
   end
 
-  # check and update each of the configured icinga envs
-  config['icinga'].each do |key, env|
+  # only run if an icinga section exists in the config
+  if config.has_key?('icinga')
 
-    warning = icinga_get(1, env['auth_key'], env['host'], env['proto'], env['port'])
-    critical = icinga_get(2, env['auth_key'], env['host'], env['proto'], env['port'])
+    # check and update each of the configured icinga envs
+    config['icinga'].each do |key, env|
 
-    status = critical['total'] > 0 ? "red" : (warning['total'] > 0 ? "yellow" : "green")
+      warning = icinga_get(1, env['auth_key'], env['host'], env['proto'], env['port'])
+      critical = icinga_get(2, env['auth_key'], env['host'], env['proto'], env['port'])
+  
+      status = critical['total'] > 0 ? "red" : (warning['total'] > 0 ? "yellow" : "green")
 
-    send_event('nagios-' + key.to_s, { criticals: critical['total'], warnings: warning['total'], status: status })
+      send_event('nagios-' + key.to_s, { criticals: critical['total'], warnings: warning['total'], status: status })
 
+    end
   end
-
 end

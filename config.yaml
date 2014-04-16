@@ -1,3 +1,16 @@
+config:
+  mon_type: icinga
+icinga:
+  prod:
+    host: '192.168.5.160'
+    port: '80'
+    proto: 'http'
+    auth_key: 'Z0ZcM7B4UOYfALLmLNhEdXkW5Ro'
+#nagios:
+#  prod:
+#    url: 'http://my-prod-nagios/cgi-bin/nagios3/'
+#    username: 'nagios'
+#    password: 'nagios'
 aviator:
   provider: openstack
   auth_service:
@@ -6,9 +19,3 @@ aviator:
     request: create_token
     validator: list_tenants
     api_version: v2
-icinga:
-  prod:
-    host: '192.168.5.160'
-    port: '80'
-    proto: 'http'
-    auth_key: 'Z0ZcM7B4UOYfALLmLNhEdXkW5Ro'
