@@ -14,16 +14,21 @@ This repo contains the widgets, the dashboard definition, and the required data 
 
 It provides one single dashboard with the following components:
 
-* 
+* Nagios or Icinga monitoring status (critical, warning)
+* Usage per tenant (vcpus, memory, instances, floating ips)
+* Global cluster usage (vcpus, memory)
 
 Screenshots
 -----------
 
-#![image]()
+#![image](https://raw.github.com/rochaporto/dashing-ceph/master/public/dashing-openstack.png)
 
 Requirements
 ------------
 
+Aviator, an openstack API in ruby.
+
+OpenStack credentials with appropriate privileges for tenant list and tenant usage queries.
 
 Setup
 -----
@@ -37,6 +42,8 @@ You can find more details in the website, but something like this should work (u
 
 Limitations
 -----------
+
+CPU and Memory allocation ratios have to be defined in the config file (would be better to get them from an API call).
 
 Development
 -----------
