@@ -21,7 +21,7 @@ It provides one single dashboard with the following components:
 Screenshots
 -----------
 
-#![image](https://raw.github.com/rochaporto/dashing-openstack/master/public/dashing-openstack.png)
+#![image](https://raw.github.com/rochaporto/dashing-openstack/blob/master/public/dashing-openstack.png)
 
 Requirements
 ------------
