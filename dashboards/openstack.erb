@@ -2,22 +2,28 @@
 <div class="gridster">
   <ul>
     <li data-row="1" data-col="1" data-sizex="1" data-sizey="1">
-      <div data-id="openstack" data-view="Image" data-title="logo" data-image="/logo.png" data-width="350px"></div>
+      <div data-id="openstack" data-view="Image" data-title="logo" data-image="/logo.png" data-width="250px"></div>
     </li>
     <li data-row="1" data-col="2" data-sizex="1" data-sizey="1">
       <div data-id="nagios-prod" data-view="Nagios" data-unordered="true" data-title="Icinga Prod" data-moreinfo="Unacknowledged events"></div>
     </li>
+    <li data-row="1" data-col="3" data-sizex="1" data-sizey="1">
+      <div data-id="vcpus-hypervisor" data-view="Meter" data-title="Hypervisor VCPUs"></div>
+    </li>
+    <li data-row="1" data-col="4" data-sizex="1" data-sizey="1">
+      <div data-id="ram-hypervisor" data-view="Meter" data-title="Hypervisor Memory"></div>
+    </li>
     <li data-row="2" data-col="1" data-sizex="1" data-sizey="1">
-      <div data-id="cores-progress" data-view="ProgressBars" data-title="VCPUs"></div>
+      <div data-id="cores-tenant" data-view="ProgressBars" data-title="VCPUs"></div>
     </li>
     <li data-row="2" data-col="2" data-sizex="1" data-sizey="1">
-      <div data-id="instances-progress" data-view="ProgressBars" data-title="Instances"></div>
+      <div data-id="instances-tenant" data-view="ProgressBars" data-title="Instances"></div>
     </li>
     <li data-row="2" data-col="3" data-sizex="1" data-sizey="1">
-      <div data-id="ram-progress" data-view="ProgressBars" data-title="Memory"></div>
+      <div data-id="ram-tenant" data-view="ProgressBars" data-title="Memory"></div>
     </li>
     <li data-row="2" data-col="4" data-sizex="1" data-sizey="1">
-      <div data-id="floatingips-progress" data-view="ProgressBars" data-title="Floating IPs"></div>
+      <div data-id="floatingips-tenant" data-view="ProgressBars" data-title="Floating IPs"></div>
     </li>
   </ul>
 </div>
