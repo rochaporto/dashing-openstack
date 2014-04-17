@@ -6,6 +6,9 @@ icinga:
     port: '80'
     proto: 'http'
     auth_key: 'Z0ZcM7B4UOYfALLmLNhEdXkW5Ro'
+openstack:
+    vcpus_allocation_ratio: 2.0
+    ram_allocation_ratio: 1.0
 #nagios:
 #  prod:
 #    url: 'http://my-prod-nagios/cgi-bin/nagios3/'
@@ -19,3 +22,7 @@ aviator:
     request: create_token
     validator: list_tenants
     api_version: v2
+  auth_credentials:
+    username: 'admin'
+    password: '123456'
+    tenant_name: 'openstack'
