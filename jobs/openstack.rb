@@ -1,4 +1,4 @@
-SCHEDULER.every '2s' do
+SCHEDULER.every '10s' do
 
   require 'bundler/setup'
   require 'aviator'
