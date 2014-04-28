@@ -128,14 +128,16 @@ SCHEDULER.every '10s' do
         name: tenant[0], progress: (tenant[1]["#{metric}_used"] * 100.0) / tenant[1]["#{metric}_quota"]
       })
     end
-    other = { 'used' => 0.0, 'quota' => 0.0 }
-    for tenant in sorted_tenants[6, sorted_tenants.length] do
-      other['used'] += tenant[1]["#{metric}_used"].to_f
-      other['quota'] += tenant[1]["#{metric}_quota"].to_f
+    if sorted_tenants.length > 5
+      other = { 'used' => 0.0, 'quota' => 0.0 }
+      for tenant in sorted_tenants[6, sorted_tenants.length] do
+        other['used'] += tenant[1]["#{metric}_used"].to_f
+        other['quota'] += tenant[1]["#{metric}_quota"].to_f
+      end
+      data.push({
+        name: 'other', progress: (other['used'] * 100.0) / other['quota']
+      })
     end
-    data.push({
-      name: 'other', progress: (other['used'] * 100.0) / other['quota']
-    })
     send_event("#{metric}-tenant", { title: title, progress_items: data})
   end
 
