@@ -43,6 +43,10 @@ You can find more details in the website, but something like this should work (u
 Limitations
 -----------
 
+Dashing seems to go out of memory on devices like raspberrypi. A workaround
+was implemented in the ceph dashboard, just add `?refresh=X` to the url to
+have it refreshed every X seconds.
+
 CPU and Memory allocation ratios have to be defined in the config file (would be better to get them from an API call).
 
 Development
