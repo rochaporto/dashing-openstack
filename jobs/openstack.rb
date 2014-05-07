@@ -101,7 +101,6 @@ SCHEDULER.every '10s' do
   session = Aviator::Session.new(
     config_file: 'config.yaml',
     environment: :aviator,
-    log_file:    'aviator.log'
   )
   session.authenticate
 
