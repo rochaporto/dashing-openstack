@@ -1,3 +1,20 @@
+Batman.Filters.bytesNumber = (num) ->
+  return num if isNaN(num)
+  if num >= 1024**6
+    (num / 1024**6).toFixed(1) + 'E'
+  else if num >= 1024**5
+    (num / 1024**5).toFixed(1) + 'P'
+  else if num >= 1024**4
+    (num / 1024**4).toFixed(1) + 'T'
+  else if num >= 1024**3
+    (num / 1024**3).toFixed(1) + 'G'
+  else if num >= 1024**2
+    (num / (1024**2)).toFixed(1) + 'M'
+  else if num >= 1024
+    (num / 1024).toFixed(1) + 'K'
+  else
+    num
+
 class Dashing.ProgressBars extends Dashing.Widget
 
   @accessor 'title'
@@ -41,7 +58,8 @@ class Dashing.ProgressBars extends Dashing.Widget
         elem = rowsContainer.find("."+normalizedItemName+" .inner-progress-bar")
         if elem.length
           @animateProgressBarContent(elem[0], parseFloat(elem[0].style.width),
-                                    parseFloat(item.progress), 1000)
+                                    parseFloat(item.progress), parseFloat(item.value),
+                                    parseFloat(item.max), 1000)
         ++counter
 
       # Remove any nodes that were not in the new data, these will be the rows
@@ -109,9 +127,11 @@ class Dashing.ProgressBars extends Dashing.Widget
   # @element - element that is going to be animated.
   # @from - the value that the element starts at.
   # @to - the value that the element is going to.
+  # @value - the actual value (not percentage) to display.
+  # @max - the max value (used for percentage).
   # @baseDuration - the minimum time the animation will perform.
   # /
-  animateProgressBarContent: (element, from, to, baseDuration) ->
+  animateProgressBarContent: (element, from, to, value, max, baseDuration) ->
     endpointDifference = (to-from)
 
     if endpointDifference != 0
@@ -130,10 +150,10 @@ class Dashing.ProgressBars extends Dashing.Widget
         ->
           currentValue += valueIncrement
           if Math.abs(currentValue - from) >= Math.abs(endpointDifference)
-            setProgressBarValue(element, to)
+            setProgressBarValue(element, to, value, max)
             clearInterval(interval)
           else
-            setProgressBarValue(element, currentValue)
+            setProgressBarValue(element, currentValue, value, max)
         stepInterval)
 
       @addInterval(interval)
@@ -144,13 +164,15 @@ class Dashing.ProgressBars extends Dashing.Widget
   #
   # @element - element to be set
   # @value - the numeric value to set the element to. This can be a float.
+  # @literal - the actual value (not in percentage).
+  # @max - the max value (which was used for percentage).
   # /
-  setProgressBarValue = (element, value) ->
+  setProgressBarValue = (element, value, literal, max) ->
     if (value > 100) 
       value = 100
     else if (value < 0) 
       value = 0
-    element.textContent = Math.floor(value) + "%"
+    element.textContent = Math.floor(value) + "%-" + Math.floor(literal) + "/" + Math.floor(max) + ""
     element.style.width = value + "%"
 
   #***/

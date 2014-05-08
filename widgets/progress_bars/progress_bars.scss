@@ -88,6 +88,11 @@ $text-color:       $base-color-lightest;
       border-radius: $row-size / 2;
       color: $white;
     }
+    .inner-text-bar {
+      background-color: $base-color-lighter;
+      border-radius: $row-size / 2;
+      color: $white;
+    }
   }
 
   .zebra-stripe {

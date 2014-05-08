@@ -16,8 +16,8 @@ SCHEDULER.every '10s' do
     tenant_data['instances_max'] = limits['maxTotalInstances']
     tenant_data['cores_used'] = limits['totalCoresUsed']
     tenant_data['cores_max'] = limits['maxTotalCores']
-    tenant_data['ram_used'] = limits['totalRAMUsed']
-    tenant_data['ram_max'] = limits['maxTotalRAM']
+    tenant_data['ram_used'] = limits['totalRAMUsed'] == nil ? 0 : limits['totalRAMUsed'] / 1024
+    tenant_data['ram_max'] = limits['maxTotalRAM'] == nil ? 0 : limits['maxTotalRAM'] / 1024
     tenant_data['floatingips_used'] = limits['totalFloatingIpsUsed']
     tenant_data['floatingips_max'] = limits['maxTotalFloatingIps']
     tenant_data['securitygroups_used'] = limits['totalSecurityGroupsUsed']
@@ -32,7 +32,7 @@ SCHEDULER.every '10s' do
     quotas = resp.body['quota_set']
     tenant_data['instances_quota'] = quotas['instances']
     tenant_data['cores_quota'] = quotas['cores']
-    tenant_data['ram_quota'] = quotas['ram']
+    tenant_data['ram_quota'] = quotas['ram'] == nil ? 0 : quotas['ram'] / 1024
     tenant_data['floatingips_quota'] = quotas['floating_ips']
     tenant_data['securitygroups_quota'] = quotas['security_groups']
     tenant_data['keypairs_quota'] = quotas['key_pairs']
@@ -62,8 +62,8 @@ SCHEDULER.every '10s' do
       data[name] = Hash.new
       data[name]['vcpus_used'] = hypervisor['vcpus_used']
       data[name]['vcpus_total'] = hypervisor['vcpus']
-      data[name]['ram_used'] = hypervisor['memory_mb_used'] * 1000 * 1000
-      data[name]['ram_total'] = hypervisor['memory_mb'] * 1000 * 1000
+      data[name]['ram_used'] = hypervisor['memory_mb_used'] * 1024 * 1024
+      data[name]['ram_total'] = hypervisor['memory_mb'] * 1024 * 1024
       data[name]['running_vms'] = hypervisor['running_vms']
     end
 
@@ -124,7 +124,8 @@ SCHEDULER.every '10s' do
     sorted_tenants = tenant_stats.sort_by {|k, v| v["#{metric}_used"]}.reverse
     for tenant in sorted_tenants[0..5] do
       data.push({
-        name: tenant[0], progress: (tenant[1]["#{metric}_used"] * 100.0) / tenant[1]["#{metric}_quota"]
+        name: tenant[0], progress: (tenant[1]["#{metric}_used"] * 100.0) / tenant[1]["#{metric}_quota"],
+        value: tenant[1]["#{metric}_used"], max: tenant[1]["#{metric}_quota"]
       })
     end
     if sorted_tenants.length > 5
@@ -134,7 +135,7 @@ SCHEDULER.every '10s' do
         other['quota'] += tenant[1]["#{metric}_quota"].to_f
       end
       data.push({
-        name: 'other', progress: (other['used'] * 100.0) / other['quota']
+        name: 'other', progress: (other['used'] * 100.0) / other['quota'], value: other['used'], max: other['quota']
       })
     end
     send_event("#{metric}-tenant", { title: title, progress_items: data})
