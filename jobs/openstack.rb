@@ -4,8 +4,11 @@ SCHEDULER.every '10s' do
   require 'aviator'
   require 'pp'
 
-  def get_tenant_data(compute, id)
+  def get_tenant_data(session, id, neutron_quotas=false)
     tenant_data = Hash.new
+
+    compute = session.compute_service
+    network = session.network_service
 
     # limits
     resp = compute.request(:limits) do |params|
@@ -37,8 +40,22 @@ SCHEDULER.every '10s' do
     tenant_data['securitygroups_quota'] = quotas['security_groups']
     tenant_data['keypairs_quota'] = quotas['key_pairs']
 
+    # floating ips
+    # ( need to ask neutron, compute/limits gives wrong values )
+    if neutron_quotas
+      resp = network.request(:list_quotas) do |params|
+        params.tenant_id=id
+      end
+      tenant_data['floatingips_quota'] = resp.body['quota']['floatingip'].to_i
+
+      resp = network.request(:list_floatingips) do |params|
+        params.tenant_id=id
+      end
+      tenant_data['floatingips_used'] = resp.body['floatingips'].length
+      tenant_data['floatingips_max'] = tenant_data['floatingips_quota']
+    end
+
     # usage
-    #resp = compute.request(:simple_tenant_usage) do |params|
     #  params.tenant_id=id
     #end
     #usage = resp.body['tenant_usages'][0]
@@ -50,10 +67,10 @@ SCHEDULER.every '10s' do
     return tenant_data
   end
 
-  def get_hypervisor_data(compute)
+  def get_hypervisor_data(session)
     data = Hash.new
 
-    resp = compute.request(:hypervisors) do |params|
+    resp = session.compute_service.request(:hypervisors) do |params|
       params.detail = true
     end
     hypervisors = resp.body['hypervisors']
@@ -111,9 +128,8 @@ SCHEDULER.every '10s' do
 
   tenant_stats = Hash.new
   # retrieve limits and usage info for each tenant, and put in data
-  compute = session.compute_service
   tenants.each do |tenant|
-    tenant_stats[tenant['name']] = get_tenant_data(compute, tenant['id'])
+    tenant_stats[tenant['name']] = get_tenant_data(session, tenant['id'], config['openstack']['neutron_quotas'])
   end
 
   # populate the tenant widgets
@@ -142,7 +158,7 @@ SCHEDULER.every '10s' do
   end
 
   # retrieve the hypervisor information
-  hypervisors_stats = get_hypervisor_data(compute)
+  hypervisors_stats = get_hypervisor_data(session)
 
   # populate the hypervisor widgets
   {
