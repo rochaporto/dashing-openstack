@@ -9,6 +9,12 @@ icinga:
 openstack:
     vcpus_allocation_ratio: 2.0
     ram_allocation_ratio: 1.0
+    # reservation for base OS + ceph + ...
+    reserved_ram_per_node: 0
+    reserved_vcpus_per_node: 0
+    # N+1 reservation to ensure we can cope with losing one node.
+    reserved_ram: 0
+    reserved_vcpus: 0
 #nagios:
 #  prod:
 #    url: 'http://my-prod-nagios/cgi-bin/nagios3/'

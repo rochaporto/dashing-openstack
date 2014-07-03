@@ -150,11 +150,18 @@ SCHEDULER.every '10s' do
   }.each do |metric, title|
     total = 0
     sum = 0
+
+    overcommit = config['openstack']["#{metric}_allocation_ratio"].to_f
+
     hypervisors_stats.each do |name, metrics|
-      total += metrics["#{metric}_total"].to_i
-      sum += metrics["#{metric}_used"].to_i
+        total += metrics["#{metric}_total"].to_i * overcommit
+        # account for reserve resources per hypervisor
+        total -= config['openstack']["reserved_#{metric}_per_node"].to_i
+        sum += metrics["#{metric}_used"].to_i
     end
-    total = total * config['openstack']["#{metric}_allocation_ratio"].to_f
+    # account for reserve resources for node failure
+    total -= config['openstack']["reserved_#{metric}"].to_i
+
     send_event("#{metric}-hypervisor", { title: title[0], 
                                          value: sum, min: 0, max: total.to_i,
                                          moreinfo: "#{title[1] ? convert_num(sum) : sum} out of #{title[1] ? convert_num(total.to_i) : total.to_i}", 
