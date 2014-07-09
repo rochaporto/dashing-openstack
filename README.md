@@ -68,3 +68,8 @@ Support
 -------
 
 Please log tickets and issues at the [github home](https://github.com/rochaporto/dashing-openstack/issues).
+
+Packaging
+-------
+
+Simple debian/ubuntu packaging is provided, [check here](docs/ubuntu.md) for instructions.

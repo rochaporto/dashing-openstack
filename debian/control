@@ -1,0 +1,11 @@
+Source: dashing-openstack
+Maintainer: Ricardo Rocha <ricardo@catalyst.net.nz>
+Section: misc
+Priority: optional
+Standards-Version: 3.9.5
+Build-Depends: debhelper (>= 9)
+
+Package: dashing-openstack
+Architecture: all
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: A dashing dashboard with some OpenStack metrics.

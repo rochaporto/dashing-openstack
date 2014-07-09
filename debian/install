@@ -1,0 +1,13 @@
+assets usr/share/dashing/openstack
+config.ru usr/share/dashing/openstack
+config.yaml usr/share/dashing/openstack
+dashboards usr/share/dashing/openstack
+Gemfile usr/share/dashing/openstack
+jobs usr/share/dashing/openstack
+lib usr/share/dashing/openstack
+LICENSE usr/share/dashing/openstack
+public usr/share/dashing/openstack
+README.md usr/share/dashing/openstack
+widgets usr/share/dashing/openstack
+.bundle usr/share/dashing/openstack
+ruby usr/share/dashing/openstack
