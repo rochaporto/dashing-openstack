@@ -12,7 +12,7 @@ SCHEDULER.every '10s' do
   # handy function to wrap icinga requests
   def icinga_get(status, auth_key, host='localhost', proto='http', port=80)
 
-    path = "#{proto}://#{host}:#{port}/icinga-web/web/api/service/filter%5BAND(SERVICE_CURRENT_STATE%7C=%7C#{status};SERVICE_CURRENT_STATE%7C=%7C#{status})%5D/columns%5BSERVICE_NAME%7CSERVICE_CURRENT_STATE%5D/countColumn=SERVICE_ID/authkey=#{auth_key}/json"
+    path = "#{proto}://#{host}:#{port}/icinga-web/web/api/service/filter%5BAND(SERVICE_CURRENT_PROBLEM_STATE%7C=%7C#{status};SERVICE_CURRENT_PROBLEM_STATE%7C=%7C#{status})%5D/columns%5BSERVICE_NAME%7CSERVICE_CURRENT_PROBLEM_STATE%5D/countColumn=SERVICE_ID/authkey=#{auth_key}/json"
 
     uri = URI.parse(path)
     resp = Net::HTTP.get_response(uri)
